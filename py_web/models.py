@@ -21,3 +21,15 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+
+class UploadFile(db.Model):
+
+
+    def __init__(self,filename):
+        self.filename=filename
+
+
+    id=db.Column(db.Integer(),primary_key=True)
+    filename=db.Column(db.String(255))
+    upload_date=db.Column(db.DateTime())
+

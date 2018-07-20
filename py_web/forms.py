@@ -1,5 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField,StringField,PasswordField,validators
+from wtforms import BooleanField, StringField, PasswordField, validators
+
+
+
 
 
 class RegistrationForm(FlaskForm):
@@ -10,5 +13,10 @@ class RegistrationForm(FlaskForm):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
-    accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
+    accept_tos = BooleanField('I accept the TOS', validators.DataRequired())
 
+class LoginForm(FlaskForm):
+    username = StringField('Username', [validators.Length(min=2, max=25),validators.DataRequired()])
+    password = PasswordField('Password', validators.DataRequired())
+class UploadForm(FlaskForm):
+    filename=StringField('Filename',validators.DataRequired())
