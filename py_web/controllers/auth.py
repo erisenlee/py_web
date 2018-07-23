@@ -3,6 +3,7 @@ from functools import wraps
 from py_web.database import db
 from py_web.models import User
 from py_web.forms import RegistrationForm,LoginForm
+
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -18,22 +19,22 @@ def login_required(f):
 
 @auth.route('/register', methods=('GET', 'POST'))
 def register():
-    form=RegistrationForm(request.form)
-    if request.method=='POST' and form.validate():
+    form=RegistrationForm()
+    if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
-            flash('User {} is already registered.'.format(form.username.data))
+            flash('User {} is already registered.'.format(form.username.data),category='warning')
         user=User(username=form.username.data,password=form.password.data,email=form.email.data)
         db.session.add(user)
         db.session.commit()
-        flash('Thanks for registering')
+        flash('Thanks for registering!Please login.',category='Success')
         return redirect(url_for('auth/login'))
     return render_template('auth/register.html', form=form)
 
 
 @auth.route('/login', methods=('GET', 'POST'))
 def login():
-    form=LoginForm(request.form)
-    if request.method=='POST' and form.validate():
+    form=LoginForm()
+    if form.validate_on_submit():
         user=User.query.filter_by(username=form.username.data).first()
         error=None
         if user is None:
