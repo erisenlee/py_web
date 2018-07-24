@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% from '_formhelper.html' import render_field,show_flash %}
+{% block content %}
+    {{ show_flash() }}
+    <form action="{{ url_for('auth.index') }}" method="post">
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        <button type="submit">ok</button>
+    </form>
+{% endblock %}

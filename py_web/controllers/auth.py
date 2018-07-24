@@ -22,8 +22,8 @@ def register():
     form=RegistrationForm()
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
-            flash('User {} is already registered.'.format(form.username.data),category='warning')
-        user=User(username=form.username.data,password=form.password.data,email=form.email.data)
+            flash('User {} is already registered.'.format(form.username.data),category='danger')
+        user=User(username=form.username.data,password=form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('Thanks for registering!Please login.',category='Success')
@@ -44,9 +44,20 @@ def login():
         if error is None:
             session.clear()
             session['user_id']=user.id
-            return redirect(url_for('index'))
-        flash(error)
+            # flash('Login success!',category='success')
+            return redirect(url_for('auth.index'))
+        flash(error, category='danger')
+
     return render_template('auth/login.html', form=form)
 
 
 
+@auth.route('/',methods=['GET','POST'])
+def index():
+    form=LoginForm()
+    if request.method=='POST' and form.validate():
+        if form.username.data:
+            flash('dsafasdsdf',category='info')
+            # redirect(url_for('auth.index'))
+    # flash('dsdsds',category='info')
+    return render_template('upload/test_form.html',form=form)

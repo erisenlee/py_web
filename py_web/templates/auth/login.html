@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
-{% from '_formhelper.html' import render_field %}
+{% from '_formhelper.html' import render_field,show_flash %}
 {% block title %}
     Login
 {% endblock %}
 {% block content %}
-    <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <form class="form-signin">
-        {{ render_field(form.username) }}
-        {{ render_field(form.password) }}
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-    </form>
-    </div>
-    <div class="col-md-4"></div>
+    <div class="row" style="padding: 50px; border: #005cbf; border-style: solid">
+        <div class="col-md-4">
+            {#        <p>{{ form.username.data }}</p>#}
+        </div>
+
+        <div class="col-md-4">
+            {{ show_flash() }}
+
+            <form class="form-signin" action="{{ url_for('auth.login') }}">
+                {{ render_field(form.username) }}
+                {{ render_field(form.password) }}
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <small class="text-muted text-center">&copy; 2017-2018</small>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
     </div>
 
 {% endblock %}

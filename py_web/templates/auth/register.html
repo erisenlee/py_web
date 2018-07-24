@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from '_formhelper.html' import render_field %}
+{% from '_formhelper.html' import render_field,show_flash %}
 
 {% block title %}
     Sin Up
@@ -9,29 +9,34 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            {% with messages = get_flashed_messages() %}
+            {% with messages=get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                    {% for category,message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            <strong>{{ message }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+
                 {% endif %}
+
             {% endwith %}
+
 
             <div class="card">
                 <div class="card-header">Create Account</div>
                 <div class="card-body">
-                    <form method=post>
-                        <dl>
-                            {{ render_field(form.username) }}
-                            {{ render_field(form.email) }}
-                            {{ render_field(form.password) }}
-                            {{ render_field(form.confirm) }}
-                            {{ render_field(form.accept_tos) }}
-                        </dl>
-                        <p><input type=submit value=Register>
+                    <form method=post action="{{ url_for('auth.register') }}">
+
+                        {{ render_field(form.username) }}
+{#                        {{ render_field(form.email) }}#}
+                        {{ render_field(form.password) }}
+                        {{ render_field(form.confirm) }}
+{#                        {{ render_field(form.accept_tos) }}#}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
                     </form>
                 </div>
             </div>
