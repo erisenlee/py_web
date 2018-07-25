@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block header %}
+Blog
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        {% for post in posts.items %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ post.title }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ post.text|truncate(255)|safe }}
+                    <a href="{{ url_for('blog.post',post_id=post.id) }}"><small>Read More</small></a>
+                </div>
+            </div>
+        {% endfor %}
+        
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <h5>Recent Blogs</h5>
+            <ul>
+                {% for post in recent %}
+                    <li><a href="{{ url_for('blog.post',post_id=post.id) }}">{{ post.title }}</a></li>
+                {% endfor %}
+                
+            </ul>
+        </div>
+        <div class="row">
+            <h5>Popular Tags</h5>
+            <ul>
+                {% for tag in top_tags %}
+                    <li><a href="{{ url_for('blog.tag',tag_name=tag[0].title) }}">{{ tag[0].title }}</a></li>
+                {% endfor %}
+                
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
