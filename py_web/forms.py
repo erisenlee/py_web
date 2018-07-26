@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, PasswordField, validators,FileField
+from wtforms import BooleanField, StringField, PasswordField, validators,FileField,TextAreaField
 
 
 
@@ -21,3 +21,8 @@ class LoginForm(FlaskForm):
 
 class UploadForm(FlaskForm):
     file=FileField('File Name',[validators.DataRequired()])
+
+
+
+class CommentForm(FlaskForm):
+    text=TextAreaField('Comment',[validators.DataRequired()])

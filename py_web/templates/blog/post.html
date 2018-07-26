@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% from '_formhelper.html' import render_field %}
+{% block title %}
+    Post-{{ post.title }}
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="page-header">{{ post.title }}</div>
+            {{ post.text }}
+            <hr>
+            <form action="{{ url_for('blog.post', post_id=post.id) }}" method="post">
+                {{ form.hidden_tag() }}
+                {{ render_field(form.text) }}
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </form>
+            <hr>
+            {% if comments %}
+                <ul>
+                    {% for comment in comments %}
+                        <li>{{ comment }}</li>
+                    {% endfor %}
+
+                </ul>
+
+            {% endif %}
+        </div>
+
+        <div class="col-md-3">
+            <div class="row">
+                <h5>Recent Blogs</h5>
+                <ul>
+                    {% for post in recent %}
+                        <li><a href="{{ url_for('blog.post',post_id=post.id) }}">{{ post.title }}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Popular Tags</h5>
+                <ul>
+                    {% for tag in top_tags %}
+                        <li><a href="{{ url_for('blog.tag',tag_name=tag[0].title) }}">{{ tag[0].title }}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
