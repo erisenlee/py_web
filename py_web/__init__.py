@@ -4,8 +4,8 @@ from .database import db
 from py_web.controllers.auth import auth
 from py_web.controllers.upload import upload
 from py_web.controllers.blog import blog
-from py_web.ext import bcrypt, file
-from flask_uploads import configure_uploads
+from py_web.ext import bcrypt
+# from flask_uploads import configure_uploads
 from flask import redirect,url_for
 
 def create_app(Config_obj):
@@ -15,7 +15,7 @@ def create_app(Config_obj):
 
     db.init_app(app)
     bcrypt.init_app(app)
-    configure_uploads(app, (file,))
+    # configure_uploads(app, (file,))
 
     @app.route('/')
     def index():

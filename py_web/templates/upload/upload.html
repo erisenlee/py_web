@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from '_formhelper.html' import render_field %}
+{% from '_formhelper.html' import render_field,show_flash %}
 {% block title %}
 
 {% endblock %}
@@ -11,8 +11,10 @@
                 <h3>Upload</h3>
                 <a href="{{ url_for('upload.file_list') }}">upload files</a>
             </div>
+            {{ show_flash() }}
             <form action="{{ url_for('upload.upload_file') }}" enctype="multipart/form-data" method="post">
-                {{ render_field(form.file) }}
+                <label for="">Upload</label>
+                <input type="file" class="form-control" name="file">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
 

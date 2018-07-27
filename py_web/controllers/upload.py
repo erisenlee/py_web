@@ -14,31 +14,56 @@ from py_web.forms import UploadForm,LoginForm
 
 upload = Blueprint('upload', __name__, url_prefix='/upload')
 
-#
-# def allowed_file(filename):
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @upload.route('/', methods=['GET', 'POST'])
 def upload_file():
-    form=UploadForm()
-    if form.validate_on_submit():
-        filename = file.save(request.files['files'])
-        if filename:
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             new_file=UploadFile(filename)
             new_file.upload_date=datetime.now()
             db.session.add(new_file)
             db.session.commit()
-            flash('file uploaded',category='success')
             return redirect(url_for('upload.file_list'))
-    return render_template('upload/upload.html',form=form)
+    return render_template('upload/upload.html')
+# def upload_file():
+#     form=UploadForm()
+#     # if form.validate_on_submit():
+#     if request.method=='POST':
+#         file=request
+#         filename = file.save(request.files['files'])
+#         if filename:
+#             filename = secure_filename(file.filename)
+#             new_file=UploadFile(filename)
+#             new_file.upload_date=datetime.now()
+#             db.session.add(new_file)
+#             db.session.commit()
+#             flash('file uploaded',category='success')
+#             return redirect(url_for('upload.file_list'))
+#     return render_template('upload/upload.html',form=form)
 
 @upload.route('/file_list',methods=['GET'])
 def file_list():
-    file=UploadFile.query.all()
-    return render_template('upload/file_list.html',file=file)
+    files=UploadFile.query.all()
+    return render_template('upload/file_list.html',file=files)
 
 
 @upload.route('/download/<int:id>')
